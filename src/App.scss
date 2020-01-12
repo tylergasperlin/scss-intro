@@ -8,17 +8,35 @@ $color-secondary: #f08a5d;
 $color-tertiary: #b83b5e;
 $color-text-dark: #333;
 $color-text-light: #eee;
+
+//this is like a variable
 $width-button:150px;
-
-nav{
-  margin: 30px;
-  background-color: $color-primary ;
-
+@mixin clearfix{
   &::after {
     content: "";
     clear: both;
     display: table
   }
+}
+
+//can pass argument to a mixon
+@mixin style-link-text($color) {
+  color: $color;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+//sass has functions
+@function divide($a, $b){
+  @return $a / $b;
+}
+
+nav{
+  //*1 px to get ths returned value in pixles
+  margin: divide(60,2)*1px;
+  background-color: $color-primary ;
+
+  @include clearfix()
 }
 
 
@@ -37,9 +55,8 @@ nav{
     }
 
     a:link{
-      text-decoration: none;
-      text-transform: uppercase;
-      color: $color-text-dark;
+      @include style-link-text($color-text-dark)
+
 
     }
     // //one way
@@ -55,21 +72,34 @@ nav{
   float: right;
 }
 
-.btn-main:link,
-.btn-hot:link{
+///use % to create an extend
+//only use extend if elements are inheritly and gramatically related
+//we use the extend on the two buttons which are the same with different colors
+%btn-placeholder{
+  //instead of using below 9902 we placed that code in an extend
   padding: 10px;
   display: inline-block;
   text-align: center;
   border-radius: 100px;
-  text-decoration: none;
-  text-transform: uppercase;
   width: $width-button;
-  color: $color-text-light;
-
+  @include style-link-text($color-text-light)
 }
+
+//9902
+// .btn-main:link,
+// .btn-hot:link{
+//   padding: 10px;
+//   display: inline-block;
+//   text-align: center;
+//   border-radius: 100px;
+//   width: $width-button;
+//   @include style-link-text($color-text-light)
+
+// }
 
 .btn-main{
   &:link{
+    @extend %btn-placeholder;
     background-color: $color-secondary;
   }
 
@@ -81,6 +111,7 @@ nav{
 
 .btn-hot{
   &:link{
+    @extend %btn-placeholder;
     background-color: $color-tertiary;
   }
 
